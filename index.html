@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+<title>{{gradual}}Wiki: collaborative wiki</title>
+<link rel="icon" href="img/{{gradual}}wiki.ico" type="image/x-icon" />
+<style>
+body { 
+  /*
+  background-image: URL(https://raw.githubusercontent.com/gradual-quanta/{{gradual}}wiki/master/img/bg.jpg);
+  background-image: URL(https://cloudflare-ipfs.com/ipns/QmSP4CGdqM5u9CTDWb9n2kvnFUByvwqqcG8oDww9Jvs71a/img/nightsky.jpg);
+  */
+  background-image: URL(http://127.0.0.1:8080/ipns/QmSP4CGdqM5u9CTDWb9n2kvnFUByvwqqcG8oDww9Jvs71a/img/{{gradual}}bg.jpg);
+  background-position: fixed;
+  background-size: cover;
+}
+.content {
+  max-width: 90%;
+  padding: 1rem;
+  margin: auto;
+  background-color: white;
+  opacity: 0.96;
+  border: 1px blue;
+}
+</style>
+</head>
+<body>
+
+<div class=content>
+<div class=md><code><pre>
+## Welcome to a [{{gradual}}Wiki] page !
+
+This is a placeholder for a [[markdown]] file on [[{{gradual}}pad]] ...
+
+the {{gradual}}pad can be localized at : [{{pageName}}](https://{{gradual}}pad.org/p/{{pageName}})
+
+Feel free to collaboratively edit it !
+
++the [{{gradual}}Team]
+</pre></code>
+</div>
+<hr>
+<div id=panel data-gradualid="{{gradual}}WikiDefault"><a href=#{{gradualid}}>[...]</a> This page is part of #{{gradual}}wiki.</div>
+</div>
+<script src=js/gradualwiki.js></script>
+</body>
