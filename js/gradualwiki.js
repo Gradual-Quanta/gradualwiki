@@ -29,7 +29,7 @@ else if (url.match(/ipfs/)) { branding = 'ipfs' }
 else if (url.match(/ipms/)) { branding = 'ipms' } 
 else if (url.match(/127/)) { branding = 'local' } 
 
-html = document.getElementsByTagName('html')[0];
+var html = document.getElementsByTagName('html')[0];
 html.innerHTML = html.innerHTML.replace(/{{gradual}}/g,branding);
 
 var hash
@@ -37,8 +37,9 @@ if(window.location.hash) {
   hash = window.location.hash.substring(1); // Puts hash in variable, and removes the # character
   if (hash == 'edit') {
     document.getElementById('panel').style.display='block';
-  //} else {
+  } else {
     //document.getElementById('panel').dataset.framaid=hash;
+    html.innerHTML = html.innerHTML.replace(/{{pageName}}/g,hash);
   }
 }
 // inject *.js javascript
@@ -142,6 +143,8 @@ function wikilinks(e,buf) {
   buf = buf.replace(rex,'<a target="$1" href="#$2">$1</a>');
   //buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2">$1</a>');
   buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2?lang=en">$1</a>');
+  rex = RegExp(/\[source\](?![('\[\]])/,'g'); // [source]
+  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageName+'/export/txt">source</a>');
   rex = RegExp(/\[edit\](?![('\[\]])/,'g'); // [edit]
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageName+'?lang=en">edit</a>');
   rex = RegExp(/(?<!['"])#(\w+)(?!['"])/,'g'); // #hashtag
