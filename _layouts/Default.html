@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<head>
+<title>{{page.name}}</title>
+<link rel="icon" href="img/gradualwiki.ico" type="image/x-icon" />
+</head>
+<body>
+
+<div class=content>
+{{content}}
+</div>
+<hr>
+<div id=panel data-gradualid="{{gradual}}WikiDefault"><a href=#{{gradualid}}>[...]</a> This page is part of #{{gradual}}wiki.</div>
+</div>
+<!-- https://www.jsdelivr.com/package/gh/gradual-quanta/gradualwiki -->
+{% if JEKYLL_ENV = "production" %}
+<script src=https://cdn.jsdelivr.net/gh/gradual-quanta/gradualwiki@master/js/gradualwiki.js></script>
+{% else %}
+<script src=js/gradualwiki.js></script>
+{% endif %}
+</body>

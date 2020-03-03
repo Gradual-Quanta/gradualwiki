@@ -58,6 +58,7 @@ p.innerHTML = p.innerHTML.replace(/{{gradualid}}/g,gradualid)
 
 var pageName
 var PageName
+var pageNameUE
 var elems = document.getElementsByClassName('md');
 get_wiki()
 
@@ -71,8 +72,9 @@ window.onhashchange = function() {
 function get_wiki() { // first element get the pageName
   pageName = (hash) ? hash : (p.dataset.gradualid) ? p.dataset.gradualid : branding+'Wiki'
   PageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+  pageNameUE = pageName.replace(/%20/,'-');
   console.log('PageName: '+PageName)
-  let url = 'https://mensuel.framapad.org/p/'+pageName+'/export/txt';
+  let url = 'https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt';
   let e = elems[0]
   get_md(e,url,render(e))
 }
@@ -97,6 +99,7 @@ function render(e) {
    md = md.replace(/{{gradual}}/g,branding);
    md = md.replace(/{{PageName}}/g,PageName);
    md = md.replace(/{{pageName}}/g,pageName);
+   md = md.replace(/{{pageNameUE}}/g,pageNameUE);
    md = md.replace(/{{gradualid}}/g,e.getAttribute('data-gradualid'));
    md = md.replace(/Don't modify anything.*?!/g,"<!-- Don't modify -->");
    md = md.replace(/\\\n/g,'<br>');
@@ -135,7 +138,7 @@ function wikilinks(e,buf) {
   console.log('looking for wikilinks')
   var gradualid = e.getAttribute('data-gradualid');
   console.log('gradualid: '+gradualid);
-  console.log('pageName: '+pageName);
+  console.log('pageNameUE: '+pageNameUE);
   if (resolver) {
   var rex = RegExp(/\[\[([^\]]*?)\]\](?!')/,'g'); // [[graduallinks]]
   buf = buf.replace(rex,"<a target=_new href=\"https://lite.qwant.com/?q=%23"+branding+"Links+%2B%22$1%22\">$1</a>");
@@ -144,9 +147,9 @@ function wikilinks(e,buf) {
   //buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2">$1</a>');
   buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2?lang=en">$1</a>');
   rex = RegExp(/\[source\](?![('\[\]])/,'g'); // [source]
-  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageName+'/export/txt">source</a>');
+  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
   rex = RegExp(/\[edit\](?![('\[\]])/,'g'); // [edit]
-  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageName+'?lang=en">edit</a>');
+  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">edit</a>');
   rex = RegExp(/(?<!['"])#(\w+)(?!['"])/,'g'); // #hashtag
   buf = buf.replace(rex,"<a target=\"$1\" href=\"https://qwant.com/?q=%26g+%23$1\">#$1</a>");
   rex = RegExp(/(?<!['\[\]])\[([^\]=]*?)\](?![('\[\]])/,'g'); // [localpage]
