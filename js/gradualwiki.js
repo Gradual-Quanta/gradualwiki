@@ -23,6 +23,7 @@ const url = window.location.href
 if (url.match(/\.gq/)) { branding = 'gradual' } 
 else if (url.match(/holo/i)) { branding = 'holo' }
 else if (url.match(/blockring/)) { branding = 'brings' } 
+else if (url.match(/oogle/)) { branding = 'yoogle' } 
 else if (url.match(/\.ml/)) { branding = 'myc' } 
 else if (url.match(/cloud/)) { branding = 'cloud' } 
 else if (url.match(/ipfs/)) { branding = 'ipfs' } 
@@ -31,10 +32,13 @@ else if (url.match(/127/)) { branding = 'local' }
 
 var html = document.getElementsByTagName('html')[0];
 html.innerHTML = html.innerHTML.replace(/{{gradual}}/g,branding);
+var body = document.getElementsByTagName('body')[0];
+//body.style.background-image.url = 'brands/'+branding+'bg.jpg';
 
 var hash
 if(window.location.hash) {
   hash = window.location.hash.substring(1); // Puts hash in variable, and removes the # character
+  hash = hash.replace('%20','-');
   if (hash == 'edit') {
     document.getElementById('panel').style.display='block';
   } else {
@@ -72,7 +76,8 @@ window.onhashchange = function() {
 function get_wiki() { // first element get the pageName
   pageName = (hash) ? hash : (p.dataset.gradualid) ? p.dataset.gradualid : branding+'Wiki'
   PageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
-  pageNameUE = pageName.replace(/%20/,'-');
+  pageNameUE = pageName.charAt(0).toLowerCase() + pageName.slice(1);
+  pageNameUE = pageNameUE.replace(/%20/,'-');
   console.log('PageName: '+PageName)
   let url = 'https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt';
   let e = elems[0]
@@ -140,16 +145,22 @@ function wikilinks(e,buf) {
   console.log('gradualid: '+gradualid);
   console.log('pageNameUE: '+pageNameUE);
   if (resolver) {
+  // external links
   var rex = RegExp(/\[\[([^\]]*?)\]\](?!')/,'g'); // [[graduallinks]]
   buf = buf.replace(rex,"<a target=_new href=\"https://lite.qwant.com/?q=%23"+branding+"Links+%2B%22$1%22\">$1</a>");
+  // local referenced links
   rex = RegExp(/\[([^\]]*?)\]\[(.*?)](?!')/,'g'); // [text][wikilink]
   buf = buf.replace(rex,'<a target="$1" href="#$2">$1</a>');
-  //buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2">$1</a>');
-  buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2?lang=en">$1</a>');
+  //buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2?lang=en">$1</a>');
+
+  // reserved wikilinks :
   rex = RegExp(/\[source\](?![('\[\]])/,'g'); // [source]
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
   rex = RegExp(/\[edit\](?![('\[\]])/,'g'); // [edit]
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">edit</a>');
+  rex = RegExp(/\[pageName\](?![('\[\]])/,'g'); // [{{pageName}}]
+  buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g++%22pageName%22\">pageName</a>");
+
   rex = RegExp(/(?<!['"])#(\w+)(?!['"])/,'g'); // #hashtag
   buf = buf.replace(rex,"<a target=\"$1\" href=\"https://qwant.com/?q=%26g+%23$1\">#$1</a>");
   rex = RegExp(/(?<!['\[\]])\[([^\]=]*?)\](?![('\[\]])/,'g'); // [localpage]
