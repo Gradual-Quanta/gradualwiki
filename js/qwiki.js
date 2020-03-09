@@ -20,24 +20,34 @@
 var resolver = 1; // improve later with a query parameter
 var branding = 'frama' 
 const url = window.location.href
-if (url.match(/\.gq/)) { branding = 'gradual' } 
-else if (url.match(/holo/i)) { branding = 'holo' }
-else if (url.match(/qwiki/i)) { branding = 'quanta' }
-else if (url.match(/blockring/)) { branding = 'brings' } 
+console.log('url: '+url)
+if (url.match(/holo/i)) { branding = 'holo' }
+else if (url.match(/\.gq/)) { branding = 'gradual' } 
 else if (url.match(/oogle/)) { branding = 'yoogle' } 
+else if (url.match(/blockring/)) { branding = 'brings' } 
+else if (url.match(/qwiki/i)) { branding = 'q' }
 else if (url.match(/\.ml/)) { branding = 'myc' } 
 else if (url.match(/cloud/)) { branding = 'cloud' } 
 else if (url.match(/ipfs/)) { branding = 'ipfs' } 
 else if (url.match(/ipms/)) { branding = 'ipms' } 
 else if (url.match(/127/)) { branding = 'local' } 
 
-var gitrepo = 'q' 
-if (url.match(/qwiki/i)) { gitrepo = 'qwiki' }
-else { gitrepo = branding + 'wiki' }
+var brand;
+var gitrepo;
+if (url.match(/#q/i)) { gitrepo = 'qwiki'; brand = 'quanta' }
+else if (url.match(/yoo/)) { gitrepo = 'yocalwiki'; brand = 'yoo' } 
+else if (url.match(/\.ml/)) { gitrepo = 'mychelium'; brand = 'mychelium' }
+else { gitrepo = branding + 'wiki'; brand = branding }
 
+console.log('branding: '+branding)
+console.log('brand: '+brand)
+console.log('gitrepo: '+gitrepo)
 var html = document.getElementsByTagName('html')[0];
-html.innerHTML = html.innerHTML.replace(/{{gradual}}/g,branding);
+html.innerHTML = html.innerHTML.replace(/{{gqio}}/g,'https://gradual-quanta.github.io')
 html.innerHTML = html.innerHTML.replace(/{{qwiki}}/g,gitrepo);
+html.innerHTML = html.innerHTML.replace(/{{gradual}}/g,brand);
+html.innerHTML = html.innerHTML.replace(/{{branding}}/g,branding);
+html.innerHTML = html.innerHTML.replace(/{{gitrepo}}/g,gitrepo);
 var body = document.getElementsByTagName('body')[0];
 //body.style.background-image.url = 'brands/'+branding+'bg.jpg';
 
@@ -84,6 +94,8 @@ function get_wiki() { // first element get the pageName
   PageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
   pageNameUE = pageName.charAt(0).toLowerCase() + pageName.slice(1);
   pageNameUE = pageNameUE.replace(/%20/,'-');
+  p.innerHTML = p.innerHTML.replace(/{{pageName}}/g,pageName)
+
   console.log('PageName: '+PageName)
   let url = 'https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt';
   let e = elems[0]
@@ -107,7 +119,9 @@ function render(e) {
  //console.log('rendering',e)
  // return a callback function for update e w/ md content
  const callBack = md => {
+   md = md.replace(/{{qwiki}}/g,gitrepo);
    md = md.replace(/{{gradual}}/g,branding);
+   md = md.replace(/{{branding}}/g,branding);
    md = md.replace(/{{PageName}}/g,PageName);
    md = md.replace(/{{pageName}}/g,pageName);
    md = md.replace(/{{pageNameUE}}/g,pageNameUE);
@@ -122,7 +136,7 @@ function render(e) {
    md = md.replace(/(?<!'){{LILO}}/g,'https://search.lilo.org/results.php?openvialilo=true&q');
    md = md.replace(/(?<!'){{START}}/g,'https://www.startpage.com/do/search?query');
    md = md.replace(/(?<!'){{chart}}/g,'https://chart.apis.google.com/chart?cht=qr&chs=240x240&chl');
-   md = md.replace(/(?<!'){{citeas}}/g,'['+pageName+'](https://gradual.quanta.github.io/qwiki/#'+pageName+')');
+   md = md.replace(/(?<!'){{citeas}}/g,'"[['+pageName+'](https://gradual-quanta.github.io/qwiki/#'+pageName+')]: <https://gradual-quanta.github.io/qwiki/#'+pageName+'>"');
    var htm = markdownify(e,md);
    
  }
@@ -136,7 +150,11 @@ function get_md(elem,url,callBack) {
         return resp.text()
       } else if (resp.status == 404) {
 	// prepare a fake response
-	return md = "## Create new pad for {{PageName}}\n The "+branding+"pad link is: [{{pageName}}]\n\nyou can [edit] this [page](#{{pageName}}): [here](https://mensual.framapad.org/p/{{pageName}}?lang=en)\n"
+	return md = 
+          "![{{branding}}wiki](brands/{{qwiki}}.png)\n"+
+          '<style>img[alt="{{branding}}wiki"] { float: right; width: 30%; max-width: 140px }</style>'+
+          "## Create new pad for {{PageName}}\n The "+brand+"pad link is: [{{pageName}}]\n\n"+
+          "you can [edit] this [page](#{{pageName}}): [here](https://mensual.framapad.org/p/{{pageName}}?lang=en)\n"
       } else { 
 	return Promise.reject(new Error(resp.statusText))
       }
@@ -155,6 +173,8 @@ function wikilinks(e,buf) {
   // external links
   var rex = RegExp(/\[\[([^\]]*?)\]\](?!')/,'g'); // [[graduallinks]]
   buf = buf.replace(rex,"<a target=_new href=\"https://lite.qwant.com/?q=%23"+branding+"Links+%2B%22$1%22\">$1</a>");
+  rex = RegExp(/\[(.*?)\]\[edit\](?!')/,'g'); // [...][edit]
+  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">$1</a>');
   // local referenced links
   rex = RegExp(/\[([^\]]*?)\]\[(.*?)](?!')/,'g'); // [text][wikilink]
   buf = buf.replace(rex,'<a target="$1" href="#$2">$1</a>');
@@ -168,7 +188,7 @@ function wikilinks(e,buf) {
   rex = RegExp(/\[pageName\](?![('\[\]])/,'g'); // [{{pageName}}]
   buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g++%22pageName%22\">pageName</a>");
 
-  rex = RegExp(/(?<!['"])#(\w+)(?!['"])/,'g'); // #hashtag
+  rex = RegExp(/(?<!['"\/])#(\w+)(?!['">])/,'g'); // #hashtag
   buf = buf.replace(rex,"<a target=\"$1\" href=\"https://qwant.com/?q=%26g+%23$1\">#$1</a>");
   rex = RegExp(/(?<!['\[\]])\[([^\]=]*?)\](?![('\[\]])/,'g'); // [localpage]
   buf = buf.replace(rex,"<a href=\"#$1\">$1</a>");
