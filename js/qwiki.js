@@ -22,6 +22,7 @@ var branding = 'frama'
 const url = window.location.href
 if (url.match(/\.gq/)) { branding = 'gradual' } 
 else if (url.match(/holo/i)) { branding = 'holo' }
+else if (url.match(/qwiki/i)) { branding = 'quanta' }
 else if (url.match(/blockring/)) { branding = 'brings' } 
 else if (url.match(/oogle/)) { branding = 'yoogle' } 
 else if (url.match(/\.ml/)) { branding = 'myc' } 
@@ -30,8 +31,13 @@ else if (url.match(/ipfs/)) { branding = 'ipfs' }
 else if (url.match(/ipms/)) { branding = 'ipms' } 
 else if (url.match(/127/)) { branding = 'local' } 
 
+var gitrepo = 'q' 
+if (url.match(/qwiki/i)) { gitrepo = 'qwiki' }
+else { gitrepo = branding + 'wiki' }
+
 var html = document.getElementsByTagName('html')[0];
 html.innerHTML = html.innerHTML.replace(/{{gradual}}/g,branding);
+html.innerHTML = html.innerHTML.replace(/{{qwiki}}/g,gitrepo);
 var body = document.getElementsByTagName('body')[0];
 //body.style.background-image.url = 'brands/'+branding+'bg.jpg';
 
@@ -116,6 +122,7 @@ function render(e) {
    md = md.replace(/(?<!'){{LILO}}/g,'https://search.lilo.org/results.php?openvialilo=true&q');
    md = md.replace(/(?<!'){{START}}/g,'https://www.startpage.com/do/search?query');
    md = md.replace(/(?<!'){{chart}}/g,'https://chart.apis.google.com/chart?cht=qr&chs=240x240&chl');
+   md = md.replace(/(?<!'){{citeas}}/g,'['+pageName+'](https://gradual.quanta.github.io/qwiki/#'+pageName+')');
    var htm = markdownify(e,md);
    
  }

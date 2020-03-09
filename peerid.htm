@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<div>
+
+<p>Time is : <span id=tics></span>
+<p>Your peerid is : <a id="peerid" href="#peerid"><span></span></a>
+</p>
+<noscript>note: You don't have javascript enabled</noscript>
+
+</div>
+<script>
+const lgw = 'http://127.0.0.1:8080'
+const pgw = 'https://ipfs.blockringtm.ml';
+const webui = 'http://127.0.0.1:5001';
+
+const api_url = webui + '/api/v0/'
+
+ let tics = (new Date()).getTime() / 1000
+ update(document,'tics',tics)
+ getPeerID( peerkey => { update(document,'peerid', peerkey) });
+
+
+ function update(doc,tag,value) {
+   let e = doc.getElementById(tag);
+   console.log(typeof(e))
+   if (typeof(e.href) != 'undefined') {
+      e.href = pgw + '/ipns/' + value;
+      e.getElementsByTagName('span')[0].innerHTML = value;
+   } else {
+      e.innerHTML = value;
+   }
+ }
+
+function getRemoteIp(callback) {
+  var url = 'https://dynsm.ml/cgi-bin/remote_addr.pl';
+  console.log(url);
+  return fetchtext(url).then( txt => {
+    callback(txt)
+    return Promise.resolve(txt)
+  })
+  .catch(error)
+}
+function getPeerID(callback) {
+  var url = api_url + 'config?&arg=Identity.PeerID&encoding=json'
+  console.log(url);
+  return fetchjson(url)
+     .then( obj => {
+        console.log('obj:', obj);
+        callback(obj.Value);
+        return Promise.resolve(obj.Value)
+     })
+     .catch(error)
+}
+
+function fetchtext(url) {
+  return fetch(url, {mode:"cors"}).then(status).then( resp => resp.text() )
+}
+function fetchjson(url) {
+  return fetch(url, {mode:"cors"}).then(status).then( resp => resp.json() )
+}
+function status(resp) {
+  if (resp.status >= 200 && resp.status < 300) {
+    return Promise.resolve(resp)
+  }
+  return Promise.reject(new Error(resp.statusText))
+}
+function error(err) {
+  console.log(err);
+}
+
+true;
+</script>
