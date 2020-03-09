@@ -1,23 +1,22 @@
-/*
-// this script loog for a div of class md
-// and replace its content with the render markdown
-// obtained from a gradualpad.
-//
-// The pad name is derived from data-gradualid
-//
-// and then replace all the [[wikilinks]]
-// with a "onclick" resolver to access the url from
-// the [[blockRing]] index.
-//
-//
-// when page is loaded it post itself under its own pagename
-// indexes are merged w/i the neigborhood (i.e. trusted friend level 1)
-// 
-// indexes are sharded according to a truncate hash,
-// to optimize access speed and size
-*/
-
 var resolver = 1; // improve later with a query parameter
+
+;// this script loog for a div of class md
+;// and replace its content with the render markdown
+;// obtained from a gradualpad.
+;//
+;// The pad name is derived from data-gradualid
+;//
+;// and then replace all the [[wikilinks]]
+;// with a "onclick" resolver to access the url from
+;// the [[blockRing]] index.
+;//
+;//
+;// when page is loaded it post itself under its own pagename
+;// indexes are merged w/i the neigborhood (i.e. trusted friend level 1)
+;// 
+;// indexes are sharded according to a truncate hash,
+;// to optimize access speed and size
+
 var branding = 'frama' 
 const url = window.location.href
 console.log('url: '+url)
