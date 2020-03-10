@@ -206,11 +206,11 @@ function wikilinks(e,buf) {
   if (lookbehind) {
   rex = RegExp('(?<![\'"\/])#(\w+)(?![\'">])','g'); // #hashtag
   buf = buf.replace(rex,"<a target=\"$1\" href=\"https://qwant.com/?q=%26g+%23$1\">#$1</a>");
-  rex = RegExp('(?<![\'\[\]])\[([^\]=]*?)\](?![(\'\[\]])','g'); // [localpage]
+  rex = RegExp("(?<!['\[\]])\[([^\]=]*?)\](?![('\[\]])",'g'); // [localpage]
   buf = buf.replace(rex,"<a href=\"#$1\">$1</a>");
   } else {
   console.log('WARNING: lookbehind: (?<!\') not supported, please use a chromium browser !')
-  rex = RegExp(/#(\w+)(?!['">])/,'g'); // #hashtag
+  rex = RegExp('[^/]#(\w+)(?![\'">])','g'); // #hashtag
   buf = buf.replace(rex,"<a target=\"$1\" href=\"https://qwant.com/?q=%26g+%23$1\">#$1</a>");
   rex = RegExp(/\[([^\]=]*?)\](?![('\[\]])/,'g'); // [localpage]
   buf = buf.replace(rex,"<a href=\"#$1\">$1</a>");
