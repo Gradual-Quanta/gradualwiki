@@ -1,8 +1,10 @@
 <!--
-
-var resolver = 1; /* improve later with a query parameter */
-// Chrome 1 - 79
-var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+const resolver = 1; /* improve later with a query parameter */
+const ua = window.navigator.userAgent.toLowerCase();
+const isChrome = /chrome|crios/.test(ua) && ! /edge|opr\//.test(ua)
+const isBrave = isChrome && ! window.google;
+if (isBrave) { console.log('so Brave'); } else { console.log('ua: '+ua); }
+//var isChrome = !!window.chrome; // && (!!window.chrome.webstore || !!window.chrome.runtime);
 var lookbehind = (isChrome) ? 1 : 0;
 
 // this script loog for a div of class md
@@ -125,6 +127,7 @@ function render(e) {
  const callBack = md => {
    md = md.replace(/{{qwiki}}/g,gitrepo);
    md = md.replace(/{{gradual}}/g,branding);
+   md = md.replace(/{{brand}}/g,brand);
    md = md.replace(/{{branding}}/g,branding);
    md = md.replace(/{{PageName}}/g,PageName);
    md = md.replace(/{{pageName}}/g,pageName);
@@ -200,13 +203,13 @@ function wikilinks(e,buf) {
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
   rex = RegExp(/\[edit\](?![('\[\]])/,'g'); // [edit]
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">edit</a>');
-  rex = RegExp(/\[pageName\](?![('\[\]])/,'g'); // [{{pageName}}]
+  rex = RegExp("\\\["+pageName+"\\\](?![('\\\[\\\]])",'g'); // [{{pageName}}]
   buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g++%22pageName%22\">pageName</a>");
 
   if (lookbehind) {
   rex = RegExp('(?<![\'"\/])#(\w+)(?![\'">])','g'); // #hashtag
   buf = buf.replace(rex,"<a target=\"$1\" href=\"https://qwant.com/?q=%26g+%23$1\">#$1</a>");
-  rex = RegExp("(?<!['\[\]])\[([^\]=]*?)\](?![('\[\]])",'g'); // [localpage]
+  rex = RegExp("(?<!['\\\[\\\]])\\\[([^\\\]=]*?)\\\](?!['(\\\[\\\]])",'g'); // [localpage]
   buf = buf.replace(rex,"<a href=\"#$1\">$1</a>");
   } else {
   console.log('WARNING: lookbehind: (?<!\') not supported, please use a chromium browser !')
