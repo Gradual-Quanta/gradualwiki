@@ -140,6 +140,7 @@ function render(e) {
    md = md.replace(/%origin%/g,document.location.origin);
    if (lookbehind) { /* Lookbehinds are not supported by Firefox and other browsers like IE.
    see [*](https://caniuse.com/#feat=js-regexp-lookbehind) */
+   md = md.replace(RegExp("(?<!'){{gqio}}",'g'),'https://gradual-quanta.github.io')
    md = md.replace(RegExp("(?<!'){{DUCK}}",'g'),'https://duckduckgo.com/?q');
    md = md.replace(RegExp("(?<!'){{QWANT}}",'g'),'https://qwant.com/?q');
    md = md.replace(RegExp("(?<!'){{LILO}}",'g'),'https://search.lilo.org/results.php?openvialilo=true&q');
@@ -148,6 +149,7 @@ function render(e) {
    md = md.replace(RegExp("(?<!'){{citeas}}",'g'),'"[['+pageName+'](https://gradual-quanta.github.io/qwiki/#'+pageName+')]: <https://gradual-quanta.github.io/qwiki/#'+pageName+'>"');
    } else {
    console.log('WARNING: lookbehind: (?<!\') not supported, please use brave !')
+   md = md.replace(/{{gqio}}(?!')/g,'https://gradual-quanta.github.io')
    md = md.replace(/{{DUCK}}(?!')/g,'https://duckduckgo.com/?q');
    md = md.replace(/{{QWANT}}(?!')/g,'https://qwant.com/?q');
    md = md.replace(/{{LILO}}(?!')/g,'https://search.lilo.org/results.php?openvialilo=true&q');
@@ -191,7 +193,7 @@ function wikilinks(e,buf) {
   // external links
   var rex = RegExp(/\[\[([^\]]*?)\]\](?!')/,'g'); // [[graduallinks]]
   buf = buf.replace(rex,"<a target=_new href=\"https://lite.qwant.com/?q=%23"+branding+"Links+%2B%22$1%22\">$1</a>");
-  rex = RegExp(/\[(.*?)\]\[edit\](?!')/,'g'); // [...][edit]
+  rex = RegExp(/\[([^\]]*?)\]\[edit\](?!')/,'g'); // [...][edit]
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">$1</a>');
   // local referenced links
   rex = RegExp(/\[([^\]]*?)\]\[(.*?)](?!')/,'g'); // [text][wikilink]
@@ -203,8 +205,10 @@ function wikilinks(e,buf) {
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
   rex = RegExp(/\[edit\](?![('\[\]])/,'g'); // [edit]
   buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">edit</a>');
+  rex = RegExp("\\\[pageName\\\](?![('\\\[\\\]])",'g'); // [pageName]
+  buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g+%22"+pageName+"%22\">"+pageName+"</a>");
   rex = RegExp("\\\["+pageName+"\\\](?![('\\\[\\\]])",'g'); // [{{pageName}}]
-  buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g++%22pageName%22\">pageName</a>");
+  buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g+%22"+pageName+"%22\">"+pageName+"</a>");
 
   if (lookbehind) {
   rex = RegExp('(?<![\'"\/])#(\w+)(?![\'">])','g'); // #hashtag
