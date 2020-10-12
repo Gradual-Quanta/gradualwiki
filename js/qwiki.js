@@ -98,8 +98,12 @@ window.onhashchange = function() {
 function get_wiki() { // first element get the pageName
   pageName = (hash) ? hash : (p.dataset.gradualid) ? p.dataset.gradualid : branding+'Wiki'
   PageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);
-  pageNameUE = pageName.charAt(0).toLowerCase() + pageName.slice(1);
-  pageNameUE = pageNameUE.replace(/%20/,'-');
+  if (PageName.match(/[a-z]/)) {
+    pageNameUE = pageName.charAt(0).toLowerCase() + pageName.slice(1); // dromadaire chamel
+  } else {
+    pageNameUE = pageName;
+  }
+  pageNameUE = pageNameUE.replace(/%20/,'-'); // UE : URLencoded
   p.innerHTML = p.innerHTML.replace(/{{pageName}}/g,pageName)
 
   console.log('PageName: '+PageName)
