@@ -200,6 +200,10 @@ function wikilinks(e,buf) {
   buf = buf.replace(rex,'<a target="$1" href="#$2">$1</a>');
   //buf = buf.replace(rex,'<a target="$1" href="https://bimestriel.framapad.org/p/$2?lang=en">$1</a>');
 
+  // https://github.com/Gradual-Quanta/qwiki/search?q=%2B%22this+page+is+part+of+%22+Wiki&type=wikis
+  // https://github.com/search?q=WIP&type=wikis
+  // https://www.google.com/search?q=site%3Agitlab.io+OR+site%3Aframa.io+OR+site%3Agithub.io+%2B%22this+page+is+part+of+%22+%2B%22%23%22+%2BWiki
+
   // reserved wikilinks :
   rex = RegExp(/\[source\](?![('\[\]])/,'g'); // [source]
   buf = buf.replace(rex,'<a target=_blank href="https://bimestriel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
