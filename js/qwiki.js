@@ -103,7 +103,7 @@ function get_wiki() { // first element get the pageName
   p.innerHTML = p.innerHTML.replace(/{{pageName}}/g,pageName)
 
   console.log('PageName: '+PageName)
-  let url = 'https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt';
+  let url = 'https://bimestriel.framapad.org/p/'+pageNameUE+'/export/txt';
   let e = elems[0]
   get_md(e,url,render(e))
 }
@@ -115,7 +115,7 @@ for (let i=1; i<elems.length; i++) {
   if (e.dataset.gradualid) {
     gradualid = e.dataset.gradualid
   }
-  let url = 'https://mensuel.framapad.org/p/'+gradualid+'/export/txt';
+  let url = 'https://bimestriel.framapad.org/p/'+gradualid+'/export/txt';
   get_md(e,url,render(e))
 }
 
@@ -194,17 +194,17 @@ function wikilinks(e,buf) {
   var rex = RegExp(/\[\[([^\]]*?)\]\](?!')/,'g'); // [[graduallinks]]
   buf = buf.replace(rex,"<a target=_new href=\"https://lite.qwant.com/?q=%23"+branding+"Links+%2B%22$1%22\">$1</a>");
   rex = RegExp(/\[([^\]]*?)\]\[edit\](?!')/,'g'); // [...][edit]
-  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">$1</a>');
+  buf = buf.replace(rex,'<a target=_blank href="https://bimestriel.framapad.org/p/'+pageNameUE+'?lang=en">$1</a>');
   // local referenced links
   rex = RegExp(/\[([^\]]*?)\]\[(.*?)](?!')/,'g'); // [text][wikilink]
   buf = buf.replace(rex,'<a target="$1" href="#$2">$1</a>');
-  //buf = buf.replace(rex,'<a target="$1" href="https://mensuel.framapad.org/p/$2?lang=en">$1</a>');
+  //buf = buf.replace(rex,'<a target="$1" href="https://bimestriel.framapad.org/p/$2?lang=en">$1</a>');
 
   // reserved wikilinks :
   rex = RegExp(/\[source\](?![('\[\]])/,'g'); // [source]
-  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
+  buf = buf.replace(rex,'<a target=_blank href="https://bimestriel.framapad.org/p/'+pageNameUE+'/export/txt">source</a>');
   rex = RegExp(/\[edit\](?![('\[\]])/,'g'); // [edit]
-  buf = buf.replace(rex,'<a target=_blank href="https://mensuel.framapad.org/p/'+pageNameUE+'?lang=en">edit</a>');
+  buf = buf.replace(rex,'<a target=_blank href="https://bimestriel.framapad.org/p/'+pageNameUE+'?lang=en">edit</a>');
   rex = RegExp("\\\[pageName\\\](?![('\\\[\\\]])",'g'); // [pageName]
   buf = buf.replace(rex,"<a href=\"https://qwant.com/?q=%26g+%22"+pageName+"%22\">"+pageName+"</a>");
   rex = RegExp("\\\["+pageName+"\\\](?![('\\\[\\\]])",'g'); // [{{pageName}}]
@@ -222,7 +222,7 @@ function wikilinks(e,buf) {
   rex = RegExp(/\[([^\]=]*?)\](?![('\[\]])/,'g'); // [localpage]
   buf = buf.replace(rex,"<a href=\"#$1\">$1</a>");
   }
-  //buf = buf.replace(rex,"<a href=\"https://mensuel.framapad.org/p/$1\">$1</a>");
+  //buf = buf.replace(rex,"<a href=\"https://bimestriel.framapad.org/p/$1\">$1</a>");
   }
   e.innerHTML = buf;
 }
